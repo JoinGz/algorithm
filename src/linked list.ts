@@ -6,10 +6,7 @@
 //   },
 // }
 
-type LinkedList = {
-  next: LinkedList | null
-  value: any
-}
+
 
 type DuLinkedList = {
   next: DuLinkedList | null,
@@ -18,29 +15,48 @@ type DuLinkedList = {
 }
 
 export class List {
-  header: boolean
-  next: LinkedList | null
-  value: any
-  constructor(data: any) {
-    this.header = true
-    this.next = null
-    this.value = data
+  header: NodeList<unknown> | null
+  length: number
+  constructor() {
+    this.header = null
+    this.length = 0
   }
 
-  add(data: any) {
-    let lastNext: LinkedList = this
-    while (lastNext.next) {
-      lastNext = lastNext.next
+  add<T>(data: T) {
+    const node = new NodeList(data)
+    let lastNext = this.header
+    if (lastNext) {
+      while (lastNext.next) {
+        lastNext = lastNext.next
+      }
+      lastNext.next = node
+    } else {
+      this.header = node
+    }
+    this.length++
+  }
+
+  print() {
+    let printStr = ''
+    let lastNext = this.header
+    if (lastNext) {
+      printStr += lastNext.value
+      while (lastNext.next) {
+        lastNext = lastNext.next
+        printStr +=  '=>' + lastNext.value 
+      }
+    } else {
+      console.warn(`no data`)
     }
 
-    lastNext.next = new NodeList(data)
+    console.log(printStr)
   }
 }
 
-class NodeList {
-  next: LinkedList | null
-  value: any
-  constructor(data: any) {
+class NodeList<T> {
+  next: NodeList<unknown> | null
+  value: T
+  constructor(data: T) {
     this.next = null
     this.value = data
   }
